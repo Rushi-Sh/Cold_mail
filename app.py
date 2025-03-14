@@ -1,73 +1,69 @@
 import streamlit as st
-from multi_model import generate_cold_email
-import json
+import logging
+from menu import menu
+from job import job_inputs
+from client import client_inputs
+from startup import startup_inputs
+from job_multi_model import generate_job_cold_email
+from client_multi_model import generate_client_cold_email
+from startup_multi_model import generate_startup_cold_email
 
-# Streamlit UI Config
+# Configure Streamlit Page
 st.set_page_config(page_title="Cold Email Generator", layout="centered")
 
-# Title & Description
-st.title("📩 AI-Powered Cold Email Generator")
-st.write("Generate highly optimized cold emails using a multi-agent AI system.")
+# Load Menu Selection
+selected_option = menu()
 
-# User Input Fields
-role = st.text_input("🎯 Target Role", "CTO")
-domain = st.text_input("🏢 Industry Domain", "SaaS")
-name = st.text_input("👤 Recipient Name", "John Doe")
-company = st.text_input("🏢 Company Name", "TechCorp")
+st.title("📝 AI-Powered Cold Email Generator")
 
-# Generate Button
-if st.button("🚀 Generate Cold Email"):
-    with st.spinner("Generating cold email... ⏳"):
-        email_result = generate_cold_email(role, domain, name, company)
-        
-        # Extract raw content (assuming AIMessage object)
-        email_content = email_result.content if hasattr(email_result, "content") else str(email_result)
+# Dictionary to Store User Inputs
+user_data = {}
 
-        # Extract response metadata if available
-        response_metadata = getattr(email_result, "response_metadata", {})
-        token_usage = response_metadata.get("token_usage", {})
-        model_name = response_metadata.get("model_name", "Unknown")
+# Select Input Form Based on User Choice
+if selected_option == "Job Applications":
+    user_data = job_inputs()
+elif selected_option == "Client Outreach":
+    user_data = client_inputs()
+elif selected_option == "Startup Pitches":
+    user_data = startup_inputs()
 
-        # Extract additional suggestions from email content
-        suggestions = "No additional suggestions provided."
-        if "Additional Suggestions:" in email_content:
-            suggestions_index = email_content.find("Additional Suggestions:")
-            suggestions = email_content[suggestions_index:]
-            email_content = email_content[:suggestions_index]
+# Logging Setup
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
-        # Display Generated Email
-        st.subheader("📨 Generated Cold Email:")
-        email_template = f"""
-        **Subject:** A Solution for {company} - Let's Connect 🚀  
+file_handler = logging.FileHandler('cold_email_generator.log')
+stream_handler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-        **Dear {name},**  
+file_handler.setFormatter(formatter)
+stream_handler.setFormatter(formatter)
 
-        {email_content}  
+logger.addHandler(file_handler)
+logger.addHandler(stream_handler)
 
-        Looking forward to your thoughts. Let’s connect!  
+# Ensure Required Fields Are Filled
+if user_data and "all_fields_filled" in user_data and user_data["all_fields_filled"]:
+    if st.button("🚀 Generate Cold Email"):
+        with st.spinner("Generating cold email... ⏳"):
+            try:
+                logger.info(f"Generating cold email for {user_data.get('name', 'User')} at {user_data.get('company', 'Unknown Company')}...")
+                
+                if selected_option == "Job Applications":
+                    email_content = generate_job_cold_email(user_data)
+                elif selected_option == "Client Outreach":
+                    email_content = generate_client_cold_email(user_data)
+                elif selected_option == "Startup Pitches":
+                    email_content = generate_startup_cold_email(user_data)
 
-        **Best Regards,**  
-        *[Your Name]*  
-        *[Your Company]*  
-        *[Your Contact Info]*  
-        """
-        st.markdown(email_template, unsafe_allow_html=True)
+                
+                logger.info("Cold email generation successful.")
+                st.text_area("📧 Generated Cold Email", email_content, height=250)
 
-        # Display Additional Suggestions
-        if suggestions:
-            st.subheader("📝 Additional Suggestions:")
-            st.markdown(suggestions, unsafe_allow_html=True)
+            except Exception as e:
+                logger.error(f"Error generating cold email: {str(e)}")
+                st.error("⚠️ An error occurred while generating the email. Please try again.")
+else:
+    st.button("🚀 Generate Cold Email", disabled=True)  # Disable button if required fields are missing
 
-        # Display Token Usage
-        st.subheader("📊 Token Usage & Model Details:")
-        st.json({
-            "Model Used": model_name,
-            "Completion Tokens": token_usage.get("completion_tokens", 0),
-            "Prompt Tokens": token_usage.get("prompt_tokens", 0),
-            "Total Tokens": token_usage.get("total_tokens", 0),
-            "Completion Time (s)": token_usage.get("completion_time", 0),
-        })
-
-# Footer
 st.markdown("---")
 st.markdown("👨‍💻 Built By **Rushi Shah**")

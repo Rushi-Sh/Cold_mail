@@ -58,7 +58,7 @@ multi_agent_system = initialize_agent(
 )
 
 # Function to run Multi-Agent Cold Email Generation
-def generate_cold_email(role, domain, name, company):
+def generate_startup_cold_email(role, domain, name, company):
     """Generates a cold email using a multi-agent system."""
     
     # Step 1: Generate initial email content
