@@ -389,7 +389,6 @@ python-pptx==1.0.2
 python-slugify==8.0.4
 pytweening==1.2.0
 pytz==2025.1
-pywinpty==2.0.14
 PyYAML==6.0.1
 pyzmq==25.1.2
 qiskit==1.0.2
