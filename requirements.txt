@@ -134,7 +134,7 @@ fonttools==4.48.1
 fqdn==1.5.1
 free_proxy==1.1.1
 frozenlist==1.5.0
-fsspec==2025.2.0
+fsspec==2024.6.1
 funcy==2.0
 gast==0.5.4
 gcloud==0.18.3
