@@ -16,8 +16,10 @@ def client_inputs():
 
     if not all_fields_filled:
         st.warning("⚠️ Please fill out all required fields before generating the cold email.")
+    
+    
 
-    return {
+    user_data =  {
         "your_name": your_name,
         "company": company,
         "client_name": client_name,
@@ -26,3 +28,11 @@ def client_inputs():
         "unique_value": unique_value,
         "all_fields_filled": all_fields_filled  # Flag to indicate completion
     }
+
+# # Print all attributes after entering details
+    if all_fields_filled:
+        st.write("### Entered Details:")
+        for key, value in user_data.items():
+            st.write(f"**{key}:** {value}")
+
+    

@@ -1,12 +1,12 @@
 import streamlit as st
 import logging
 from menu import menu
-from job import job_inputs
-from client import client_inputs
-from startup import startup_inputs
-from job_multi_model import generate_job_cold_email
-from client_multi_model import generate_client_cold_email
-from startup_multi_model import generate_startup_cold_email
+from job_cold_mail.job import job_inputs
+from client_cold_mail.client import client_inputs
+from startup_cold_mail.startup import startup_inputs
+from job_cold_mail.job_multi_model import generate_job_cold_email
+from client_cold_mail.client_multi_model import generate_client_cold_email
+from startup_cold_mail.startup_multi_model import generate_startup_cold_email
 
 # Configure Streamlit Page
 st.set_page_config(page_title="Cold Email Generator", layout="centered")

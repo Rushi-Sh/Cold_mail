@@ -1,5 +1,5 @@
 import streamlit as st
-from resume_extractor.resume_extractor_agent import extract_details, extract_text_from_pdf
+from side_tools.resume_extractor_agent import extract_details, extract_text_from_pdf
 
 def job_inputs():
     
