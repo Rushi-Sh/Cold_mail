@@ -4,5 +4,3 @@ venv
 mail_sender.py
 
 cold_email_generator.log
-
-requirements.txt
