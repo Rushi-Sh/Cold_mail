@@ -1,4 +1,4 @@
-venv
+coldmail
 .env
 
 mail_sender.py
