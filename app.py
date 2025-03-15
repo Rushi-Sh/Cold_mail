@@ -1,6 +1,6 @@
 import streamlit as st
 import logging
-from menu import menu
+from menu.menu import menu
 from job_cold_mail.job import job_inputs
 from client_cold_mail.client import client_inputs
 from startup_cold_mail.startup import startup_inputs
